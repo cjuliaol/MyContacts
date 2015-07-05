@@ -2,8 +2,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.example.thewizard.cjuliaol.mycontacts.ContactViewActivity">
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
+    <item android:id="@+id/contact_view_edit"
+          android:title="@string/edit_contact"
           android:orderInCategory="100"
-          app:showAsAction="never"/>
+          android:icon="@drawable/ic_edit"
+          app:showAsAction="ifRoom"/>
 </menu>

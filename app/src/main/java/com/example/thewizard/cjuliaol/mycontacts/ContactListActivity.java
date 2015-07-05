@@ -17,7 +17,8 @@ import java.util.ArrayList;
 
 public class ContactListActivity extends AppCompatActivity {
 
-    ArrayList<Contact> mContacts;
+   private ArrayList<Contact> mContacts;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,12 @@ public class ContactListActivity extends AppCompatActivity {
         for (int i = 0; i < 25; i++) {
             Contact contact1 = new Contact();
             contact1.setName("John Smith"+i);
+            contact1.phoneNumbers = new ArrayList<String>();
+            contact1.phoneNumbers.add("8495557777");
+            contact1.phoneNumbers.add("8495554444");
+            contact1.emails = new ArrayList<String>();
+            contact1.emails.add("john@smith.com");
+            contact1.emails.add("captain@smith.com");
             mContacts.add(contact1);
         }
 
