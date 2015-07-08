@@ -17,20 +17,21 @@ import java.util.ArrayList;
 
 public class ContactListActivity extends AppCompatActivity {
 
-   private ArrayList<Contact> mContacts;
+    //private ArrayList<Contact> mContacts;
+    private ContactList mContacts;
+    private ContactAdapter mAdapter;
 
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
 
-        mContacts = new ArrayList<Contact>();
-
+        //mContacts = new ArrayList<Contact>();
+        mContacts = ContactList.getInstance();
 
         for (int i = 0; i < 25; i++) {
             Contact contact1 = new Contact();
-            contact1.setName("John Smith"+i);
+            contact1.setName("John Smith" + i);
             contact1.phoneNumbers = new ArrayList<String>();
             contact1.phoneNumbers.add("8495557777");
             contact1.phoneNumbers.add("8495554444");
@@ -41,7 +42,8 @@ public class ContactListActivity extends AppCompatActivity {
         }
 
         ListView listView = (ListView) findViewById(R.id.contact_list_view);
-        listView.setAdapter(new ContactAdapter(mContacts));
+        mAdapter = new ContactAdapter(mContacts);
+        listView.setAdapter(mAdapter);
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             int previousFirstItem;
@@ -67,10 +69,9 @@ public class ContactListActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Contact contact = mContacts.get(position);
 
                 Intent intent = new Intent(ContactListActivity.this, ContactViewActivity.class);
-                intent.putExtra(ContactViewActivity.EXTRA,contact);
+                intent.putExtra(ContactViewActivity.EXTRA, position);
 
                 startActivity(intent);
 
@@ -97,6 +98,17 @@ public class ContactListActivity extends AppCompatActivity {
 
             return convertView;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateUI();
+    }
+
+    private void updateUI() {
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

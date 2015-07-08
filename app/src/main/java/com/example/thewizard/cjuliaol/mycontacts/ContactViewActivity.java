@@ -29,6 +29,9 @@ public class ContactViewActivity extends AppCompatActivity {
     private static final String TAG = "ContactViewActivity";
     private int mColor;
     private Contact mContact;
+    private int mPosition;
+    private TextView mContactName;
+    private FieldsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +53,11 @@ public class ContactViewActivity extends AppCompatActivity {
         headerSection.setLayoutParams(new LinearLayout.LayoutParams(width, (int) (width * (9.0 / 16.0))));
 
 
-        TextView contactName = (TextView) findViewById(R.id.contact_name);
-        mContact = (Contact) getIntent().getSerializableExtra(EXTRA);
-        contactName.setText(mContact.getName());
+        mPosition = getIntent().getIntExtra(EXTRA, 0);
+        mContact = ContactList.getInstance().get(mPosition);
+
+        mContactName = (TextView) findViewById(R.id.contact_name);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contact_view_toolbar);
         //  setSupportActionBar(toolbar);
@@ -64,8 +69,8 @@ public class ContactViewActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.contact_view_edit) {
-                    Intent intent = new Intent(ContactViewActivity.this,ContactEditActivity.class);
-                    intent.putExtra(ContactEditActivity.EXTRA,mContact);
+                    Intent intent = new Intent(ContactViewActivity.this, ContactEditActivity.class);
+                    intent.putExtra(ContactEditActivity.EXTRA, mPosition);
                     startActivity(intent);
                     Log.d(TAG, "Edit is clicked");
                 }
@@ -77,7 +82,8 @@ public class ContactViewActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.menu_contact_view);
 
         ListView listView = (ListView) findViewById(R.id.contact_view_fields);
-        listView.setAdapter(new FieldsAdapter(mContact.phoneNumbers,mContact.emails));
+        mAdapter = new FieldsAdapter(mContact.phoneNumbers, mContact.emails);
+        listView.setAdapter(mAdapter);
 
         // To use this palette we have to add an external library
         // compile "com.android.support:palette-v7:21.0.+"  in build.gradle (Module:app)
@@ -91,7 +97,12 @@ public class ContactViewActivity extends AppCompatActivity {
         // With our Palette now created, we can get a color from it and use that to change the color of our icons.
         mColor = palette.getDarkVibrantSwatch().getRgb();
 
+        updateUI();
+    }
 
+    private void updateUI() {
+        mContactName.setText(mContact.getName());
+        mAdapter.notifyDataSetChanged();
 
     }
 
@@ -115,22 +126,21 @@ public class ContactViewActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // In this case getView cannot be access directly because it is an abstract method
-          // super.getView(position,convertView,parent);
-            if(convertView == null) {
-                convertView= ContactViewActivity.this.getLayoutInflater().inflate(R.layout.contact_view_field_row,parent,false);
+            // super.getView(position,convertView,parent);
+            if (convertView == null) {
+                convertView = ContactViewActivity.this.getLayoutInflater().inflate(R.layout.contact_view_field_row, parent, false);
             }
 
             String value = (String) getItem(position);
-            TextView contactValue = (TextView)  convertView.findViewById(R.id.contact_view_field_value);
+            TextView contactValue = (TextView) convertView.findViewById(R.id.contact_view_field_value);
             contactValue.setText(value);
 
             ImageView imageView = (ImageView) convertView.findViewById(R.id.field_icon);
 
-            if(isFirst(position)) {
-                if(isEmail(position)) {
+            if (isFirst(position)) {
+                if (isEmail(position)) {
                     imageView.setImageResource(R.drawable.ic_email);
-                }
-                else {
+                } else {
                     imageView.setImageResource(R.drawable.ic_call);
                 }
             }
@@ -156,7 +166,6 @@ public class ContactViewActivity extends AppCompatActivity {
             }
 
 
-
         }
 
         private boolean isEmail(int position) {
@@ -168,13 +177,21 @@ public class ContactViewActivity extends AppCompatActivity {
             }
 
         }
+
         private boolean isFirst(int position) {
 
-            if(position == 0 || position == phoneNumbers.size() ) {
+            if (position == 0 || position == phoneNumbers.size()) {
                 return true;
             }
             return false;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUI();
+        Log.d(TAG, "We're back, baby");
     }
 
     @Override

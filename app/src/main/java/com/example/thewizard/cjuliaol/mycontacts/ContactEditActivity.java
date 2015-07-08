@@ -3,6 +3,7 @@ package com.example.thewizard.cjuliaol.mycontacts;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +23,8 @@ public class ContactEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_edit);
 
-         mContact = (Contact) getIntent().getSerializableExtra(EXTRA);
+         int position =  getIntent().getIntExtra(EXTRA,0);
+        mContact = ContactList.getInstance().get(position);
 
         Toolbar toolbar =(Toolbar) findViewById(R.id.contact_edit_toolbar);
         toolbar.setTitle(getResources().getString(R.string.edit_contact));
@@ -38,7 +40,7 @@ public class ContactEditActivity extends AppCompatActivity {
                 mContact.phoneNumbers = getSectionValues(R.id.phonenumber_section);
                 mContact.emails = getSectionValues(R.id.email_section);
                 Toast.makeText(ContactEditActivity.this, "Saved contact", Toast.LENGTH_SHORT).show();
-                
+
                 finish(); // Finish the activity
             }
         });
@@ -77,6 +79,7 @@ public class ContactEditActivity extends AppCompatActivity {
         for (int i=0; i <section.getChildCount(); i++ ) {
            EditText editText = (EditText) section.getChildAt(i);
             values.add(editText.getText().toString());
+            Log.d(TAG,"Value "+ values.get(i));
         }
 
         return values;
