@@ -1,50 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.example.thewizard.cjuliaol.mycontacts.ContactViewActivity">
+              android:id="@+id/view_fragment_container"
+              tools:context="com.example.thewizard.cjuliaol.mycontacts.ContactViewActivity"/>
 
-    <RelativeLayout
-        android:id="@+id/contact_view_header"
-        android:layout_width="match_parent"
-        android:layout_height="200dp">
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/parrots"/>
-
-        <TextView
-            android:id="@+id/contact_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/vertical_small_margin"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="@android:color/white"/>
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/contact_view_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        </android.support.v7.widget.Toolbar>
-
-    </RelativeLayout>
-
-    <ListView
-        android:id="@+id/contact_view_fields"
-        android:paddingLeft="@dimen/vertical_small_margin"
-        android:paddingRight="@dimen/vertical_small_margin"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="100"/>
-
-</LinearLayout>
