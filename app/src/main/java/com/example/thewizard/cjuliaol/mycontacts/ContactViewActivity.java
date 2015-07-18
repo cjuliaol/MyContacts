@@ -25,7 +25,29 @@ import java.util.ArrayList;
 
 public class ContactViewActivity extends AppCompatActivity {
 
-    public static final String EXTRA = "ContactViewActivity";
+    public static final String EXTRA = "CVA_Contact";
     private static final String TAG = "ContactViewActivity";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_contact_view);
+
+        ContactViewFragment contactViewFragment =  new ContactViewFragment();
+        contactViewFragment.setPosition(getIntent().getIntExtra(EXTRA,0));
+
+        if (getFragmentManager().findFragmentById(R.id.view_fragment_container) == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.view_fragment_container, contactViewFragment)
+                    .commit();
+
+
+        }
+
+
+    }
+
+
+
 
 }

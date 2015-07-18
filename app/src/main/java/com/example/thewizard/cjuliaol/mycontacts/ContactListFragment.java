@@ -2,6 +2,7 @@ package com.example.thewizard.cjuliaol.mycontacts;
 
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -28,6 +29,7 @@ public class ContactListFragment extends Fragment {
     //private ArrayList<Contact> mContacts;
     private ContactList mContacts;
     private ContactAdapter mAdapter;
+    private Contract mContract;
 
     public ContactListFragment() {
         // Required empty public constructor
@@ -87,10 +89,12 @@ public class ContactListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(getActivity(), ContactViewActivity.class);
-                intent.putExtra(ContactViewActivity.EXTRA, position);
+                /////////////////////
 
-                startActivity(intent);
+                if(mContract != null) {
+                   mContract.selectedPosition(position);
+                }
+
 
             }
         });
@@ -99,32 +103,31 @@ public class ContactListFragment extends Fragment {
     }
 
 
-
-
-    private class ContactAdapter extends ArrayAdapter<Contact> {
-
-        ContactAdapter(ArrayList<Contact> contacts) {
-            super(getActivity(), R.layout.contact_list_row, R.id.contact_row_name, contacts);
-        }
-
-        // To customize the custon row
-        // To show what you want to show
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = super.getView(position, convertView, parent);
-            Contact contact = getItem(position);
-            TextView nameTextView = (TextView) convertView.findViewById(R.id.contact_row_name);
-            nameTextView.setText(contact.getName());
-
-            return convertView;
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
 
         updateUI();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+
+            mContract = (Contract) getActivity();
+        } catch (
+                ClassCastException e
+                )
+        {  throw new IllegalStateException("Activity does not implement contract");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContract = null;
     }
 
     private void updateUI() {
@@ -152,5 +155,28 @@ public class ContactListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private class ContactAdapter extends ArrayAdapter<Contact> {
+
+        ContactAdapter(ArrayList<Contact> contacts) {
+            super(getActivity(), R.layout.contact_list_row, R.id.contact_row_name, contacts);
+        }
+
+        // To customize the custon row
+        // To show what you want to show
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = super.getView(position, convertView, parent);
+            Contact contact = getItem(position);
+            TextView nameTextView = (TextView) convertView.findViewById(R.id.contact_row_name);
+            nameTextView.setText(contact.getName());
+
+            return convertView;
+        }
+    }
+
+
+    public interface Contract {
+        public void selectedPosition(int position);
+    }
     /////////////////////////////
 }

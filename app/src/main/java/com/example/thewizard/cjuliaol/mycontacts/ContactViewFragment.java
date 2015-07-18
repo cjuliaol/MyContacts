@@ -32,6 +32,8 @@ import java.util.ArrayList;
  */
 public class ContactViewFragment extends Fragment {
 
+
+    private static final String TAG = "ContactViewFragment";
     private int mColor;
     private Contact mContact;
     private int mPosition;
@@ -42,6 +44,16 @@ public class ContactViewFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    public void setPosition(int position) {
+        mPosition = position;
+
+        if (mAdapter != null) {
+            mContact = ContactList.getInstance().get(position);
+            mAdapter.setContact(mContact);
+            updateUI();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +77,7 @@ public class ContactViewFragment extends Fragment {
         headerSection.setLayoutParams(new LinearLayout.LayoutParams(width, (int) (width * (9.0 / 16.0))));*/
 
 
-        mPosition = getIntent().getIntExtra(EXTRA, 0);
+
         mContact = ContactList.getInstance().get(mPosition);
 
         mContactName = (TextView) v.findViewById(R.id.contact_name);
@@ -94,7 +106,7 @@ public class ContactViewFragment extends Fragment {
         toolbar.inflateMenu(R.menu.menu_contact_view);
 
         ListView listView = (ListView) v.findViewById(R.id.contact_view_fields);
-        mAdapter = new FieldsAdapter(mContact.phoneNumbers, mContact.emails);
+        mAdapter = new FieldsAdapter(mContact);
         listView.setAdapter(mAdapter);
 
         // To use this palette we have to add an external library
@@ -122,16 +134,20 @@ public class ContactViewFragment extends Fragment {
 
     }
 
-    // Adapter to load data to ListView; this can handle more than one Array. ArrayAdapter Not.
+    // Adapter to load data to ListView; this adapter (BaseAdapter) can handle more than one Array. ArrayAdapter Not.
     private class FieldsAdapter extends BaseAdapter {
 
         ArrayList<String> phoneNumbers;
         ArrayList<String> emails;
 
         // Constructor to receive data
-        FieldsAdapter(ArrayList<String> phoneNumbers, ArrayList<String> emails) {
-            this.phoneNumbers = phoneNumbers;
-            this.emails = emails;
+        FieldsAdapter(Contact contact) {
+          this.setContact(contact);
+        }
+
+        public void setContact(Contact contact) {
+            this.phoneNumbers = contact.phoneNumbers;
+            this.emails = contact.emails;
         }
 
         @Override
