@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ContactViewActivity extends AppCompatActivity {
+public class ContactViewActivity extends AppCompatActivity implements ContactViewFragment.Contract {
 
     public static final String EXTRA = "CVA_Contact";
     private static final String TAG = "ContactViewActivity";
@@ -33,21 +33,23 @@ public class ContactViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_view);
 
-        ContactViewFragment contactViewFragment =  new ContactViewFragment();
-        contactViewFragment.setPosition(getIntent().getIntExtra(EXTRA,0));
+        ContactViewFragment contactViewFragment = new ContactViewFragment();
+        contactViewFragment.setPosition(getIntent().getIntExtra(EXTRA, 0));
 
         if (getFragmentManager().findFragmentById(R.id.view_fragment_container) == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.view_fragment_container, contactViewFragment)
                     .commit();
-
-
         }
 
 
     }
 
 
-
-
+    @Override
+    public void selectedEditPosition(int position) {
+        Intent intent = new Intent(this, ContactEditActivity.class);
+        intent.putExtra(ContactEditActivity.EXTRA, position);
+        startActivity(intent);
+    }
 }

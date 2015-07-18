@@ -25,11 +25,10 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactListFragment extends Fragment {
+public class ContactListFragment extends ContractFragment<ContactListFragment.Contract> {
     //private ArrayList<Contact> mContacts;
     private ContactList mContacts;
     private ContactAdapter mAdapter;
-    private Contract mContract;
 
     public ContactListFragment() {
         // Required empty public constructor
@@ -91,8 +90,8 @@ public class ContactListFragment extends Fragment {
 
                 /////////////////////
 
-                if(mContract != null) {
-                   mContract.selectedPosition(position);
+                if (getContrat() != null) {
+                    getContrat().selectedPosition(position);
                 }
 
 
@@ -110,25 +109,6 @@ public class ContactListFragment extends Fragment {
         updateUI();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        try {
-
-            mContract = (Contract) getActivity();
-        } catch (
-                ClassCastException e
-                )
-        {  throw new IllegalStateException("Activity does not implement contract");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mContract = null;
-    }
 
     private void updateUI() {
         mAdapter.notifyDataSetChanged();

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ContactListActivity extends AppCompatActivity implements ContactListFragment.Contract {
+public class ContactListActivity extends AppCompatActivity implements ContactListFragment.Contract,ContactViewFragment.Contract {
 
     private ContactListFragment mContactListFragment;
     private ContactViewFragment mContactViewFragment;
@@ -65,4 +65,10 @@ public class ContactListActivity extends AppCompatActivity implements ContactLis
     }
 
 
+    @Override
+    public void selectedEditPosition(int position) {
+                     Intent intent = new Intent(this, ContactEditActivity.class);
+                    intent.putExtra(ContactEditActivity.EXTRA, position);
+                    startActivity(intent);
+    }
 }

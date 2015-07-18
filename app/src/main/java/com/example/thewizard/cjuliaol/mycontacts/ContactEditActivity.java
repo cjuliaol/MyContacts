@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class ContactEditActivity extends AppCompatActivity {
+public class ContactEditActivity extends AppCompatActivity  {
     public static final String EXTRA = "CEA_EXTRA";
     private static final String TAG ="ContactEditActivity" ;
    private Contact mContact;
@@ -129,4 +129,6 @@ public class ContactEditActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

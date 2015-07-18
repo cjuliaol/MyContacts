@@ -1,6 +1,7 @@
 package com.example.thewizard.cjuliaol.mycontacts;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactViewFragment extends Fragment {
+public class ContactViewFragment extends ContractFragment<ContactViewFragment.Contract> {
 
 
     private static final String TAG = "ContactViewFragment";
@@ -77,7 +78,6 @@ public class ContactViewFragment extends Fragment {
         headerSection.setLayoutParams(new LinearLayout.LayoutParams(width, (int) (width * (9.0 / 16.0))));*/
 
 
-
         mContact = ContactList.getInstance().get(mPosition);
 
         mContactName = (TextView) v.findViewById(R.id.contact_name);
@@ -93,9 +93,11 @@ public class ContactViewFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.contact_view_edit) {
-                    Intent intent = new Intent(getActivity(), ContactEditActivity.class);
+                    getContrat().selectedEditPosition(mPosition);
+                    // Before we use Intent here so fragment was couple with activity
+                    /* Intent intent = new Intent(getActivity(), ContactEditActivity.class);
                     intent.putExtra(ContactEditActivity.EXTRA, mPosition);
-                    startActivity(intent);
+                    startActivity(intent);*/
                     Log.d(TAG, "Edit is clicked");
                 }
 
@@ -126,8 +128,6 @@ public class ContactViewFragment extends Fragment {
     }
 
 
-
-
     private void updateUI() {
         mContactName.setText(mContact.getName());
         mAdapter.notifyDataSetChanged();
@@ -142,7 +142,7 @@ public class ContactViewFragment extends Fragment {
 
         // Constructor to receive data
         FieldsAdapter(Contact contact) {
-          this.setContact(contact);
+            this.setContact(contact);
         }
 
         public void setContact(Contact contact) {
@@ -247,4 +247,14 @@ public class ContactViewFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    // Define a interface in the fragment to implement in the activity so to pass data between
+    // fragments and decouple fragment from activity
+
+    public interface Contract {
+        public void selectedEditPosition(int position);
+    }
+
+
 }
